@@ -1,0 +1,36 @@
+---
+name: Publish
+'on':
+  push:
+    tags:
+      - '*'
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cliffano/command-docker-action@v2.1.0
+        with:
+          command: 'make deps ci'
+          image: cliffano/studio:4.0.0
+      - name: Verify generated files
+        run: |
+          shopt -s nullglob
+          files=(stage/*)
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No generated files found under stage/" >&2
+            exit 1
+          fi
+          ls -l stage/
+      - name: Publish generated files to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "${TAG}" > /dev/null 2>&1; then
+            gh release create "${TAG}" --verify-tag --title "${TAG}" --generate-notes
+          fi
+          gh release upload "${TAG}" stage/* --clobber
