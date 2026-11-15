@@ -17,16 +17,16 @@ make deps
 Generate one model and its reports:
 
 ```shell
-make model BOARD_SIZE=3
+make gen BOARD_SIZE=3
 ```
 
 Generate models for every supported board size:
 
 ```shell
-make models
+make gen-all
 ```
 
-Remove the virtual environment and generated files:
+Remove generated files:
 
 ```shell
 make clean
@@ -36,18 +36,19 @@ Generated files are written to `stage/`:
 
 ```text
 stage/
-├── tictactoe-3x3.pt
-├── tictactoe-3x3-training.json
-├── tictactoe-3x3-evaluation.json
+├── tictactoe-3x3-<version>.pt
+├── tictactoe-3x3-training-<version>.json
+├── tictactoe-3x3-evaluation-<version>.json
 ├── ...
-├── tictactoe-8x8.pt
-├── tictactoe-8x8-training.json
-└── tictactoe-8x8-evaluation.json
+├── tictactoe-8x8-<version>.pt
+├── tictactoe-8x8-training-<version>.json
+└── tictactoe-8x8-evaluation-<version>.json
 ```
 
 The training script uses a deterministic seed and selects the network size for
 each board dimension. The committed script is the record of the parameters used
-to produce the models.
+to produce the models. The version comes from the Makefile's `version` variable
+and is included immediately before each generated file extension.
 
 ## Models
 
@@ -58,7 +59,7 @@ hidden-layer size. Load a generated model with the published package:
 ```python
 from tictactoe_policy import TicTacToePolicy
 
-policy = TicTacToePolicy.load("stage/tictactoe-3x3.pt")
+policy = TicTacToePolicy.load("stage/tictactoe-3x3-<version>.pt")
 move = policy.choose_move([
     1, -1, 0,
     0, 1, 0,

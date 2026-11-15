@@ -9,6 +9,13 @@ if [[ $# -ne 1 ]]; then
 fi
 
 BOARD_SIZE="$1"
+MODEL_VERSION="${MODEL_VERSION:?MODEL_VERSION is required}"
+
+if [[ ! "${MODEL_VERSION}" =~ ^[0-9A-Za-z][0-9A-Za-z.+-]*$ ]]; then
+  echo "MODEL_VERSION contains unsupported filename characters." >&2
+  exit 1
+fi
+
 case "${BOARD_SIZE}" in
   3)
     HIDDEN_SIZE=16
@@ -32,9 +39,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 POLICY_COMMAND="${PROJECT_DIR}/.venv/bin/tictactoe-policy"
 OUTPUT_DIR="${PROJECT_DIR}/stage"
-MODEL_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}.pt"
-TRAINING_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}-training.json"
-EVALUATION_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}-evaluation.json"
+MODEL_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}-${MODEL_VERSION}.pt"
+TRAINING_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}-training-${MODEL_VERSION}.json"
+EVALUATION_PATH="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}-evaluation-${MODEL_VERSION}.json"
 
 if [[ ! -x "${POLICY_COMMAND}" ]]; then
   echo "Missing ${POLICY_COMMAND}. Install requirements into .venv first." >&2

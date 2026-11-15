@@ -1,3 +1,5 @@
+version ?= 0.9.0-pre.0
+
 ci: clean lint gen-all
 
 define python_venv
@@ -32,9 +34,9 @@ gen:
 		echo "BOARD_SIZE is required. Example: make gen BOARD_SIZE=3" >&2; \
 		exit 1; \
 	fi
-	./scripts/generate-model.sh "$(BOARD_SIZE)"
+	MODEL_VERSION="$(version)" ./scripts/generate-model.sh "$(BOARD_SIZE)"
 
 gen-all:
-	./scripts/generate-models.sh
+	MODEL_VERSION="$(version)" ./scripts/generate-models.sh
 
 .PHONY: ci deps rmdeps deps-extra-apt deps-upgrade clean lint gen gen-all
