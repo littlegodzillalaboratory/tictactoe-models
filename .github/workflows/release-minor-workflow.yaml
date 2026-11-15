@@ -1,6 +1,7 @@
 ---
 name: Release Minor
 on: [workflow_dispatch]
+permissions: {}
 jobs:
   build:
     runs-on: ubuntu-slim

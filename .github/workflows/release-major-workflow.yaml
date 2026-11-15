@@ -1,6 +1,7 @@
 ---
 name: Release Major
 on: [workflow_dispatch]
+permissions: {}
 jobs:
   build:
     runs-on: ubuntu-slim
