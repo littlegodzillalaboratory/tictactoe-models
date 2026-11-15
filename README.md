@@ -1,8 +1,12 @@
+![Avatar](avatar.jpg)
+
+[![Build Status](https://github.com/littlegodzillalaboratory/wayang-tactics/actions/workflows/ci-workflow.yaml/badge.svg)](https://github.com/littlegodzillalaboratory/wayang-tactics/actions/workflows/ci-workflow.yaml)
+
 # TicTacToe Models
 
 TicTacToe Models generates trained policy models and evaluation metadata for
 configurable-size Tic-Tac-Toe boards from 3×3 through 8×8. Model training and
-evaluation are provided by the published `tictactoe-policy` Python package.
+evaluation are provided by the published [TicTacToe Policy](https://pypi.org/project/tictactoe-policy/) Python package.
 
 ## Installation
 
