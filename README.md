@@ -16,6 +16,9 @@ Create a virtual environment and install the pinned dependencies:
 make deps
 ```
 
+Model quality validation also requires `jq`; the Studio development image
+installs it through `make deps-extra-apt`.
+
 ## Usage
 
 Generate one model and its reports:
@@ -43,6 +46,8 @@ stage/
 ├── tictactoe-3x3-<version>.pt
 ├── tictactoe-3x3-training-<version>.json
 ├── tictactoe-3x3-evaluation-<version>.json
+├── tictactoe-3x3-evaluation-seed314-<version>.json
+├── tictactoe-3x3-evaluation-seed2718-<version>.json
 ├── ...
 ├── tictactoe-8x8-<version>.pt
 ├── tictactoe-8x8-training-<version>.json
@@ -53,6 +58,38 @@ The training script uses a deterministic seed and selects the network size for
 each board dimension. The committed script is the record of the parameters used
 to produce the models. The version comes from the Makefile's `version` variable
 and is included immediately before each generated file extension.
+
+## Training Configuration
+
+| Board | Hidden units | Samples | Search depth | Epochs | Learning rate |
+| ----- | -----------: | ------: | -----------: | -----: | ------------: |
+| 3×3 | 128 | exhaustive | exact | 500 | 0.01 |
+| 4×4 | 128 | 50,000 | 4 | 300 | 0.005 |
+| 5×5 | 256 | 75,000 | 3 | 300 | 0.005 |
+| 6×6 | 256 | 100,000 | 3 | 300 | 0.005 |
+| 7×7 | 256 | 125,000 | 3 | 300 | 0.005 |
+| 8×8 | 512 | 150,000 | 3 | 300 | 0.005 |
+
+Every model is evaluated with 100 games per opponent and player assignment
+using seeds 42, 314, and 2718. Generation fails if any report misses its
+minimum teacher agreement, tactical accuracy, legality, or loss thresholds.
+This prevents a release from publishing a model merely because training
+completed successfully.
+
+The 3×3 configuration was measured at 99.82% optimal-move agreement, 100%
+immediate-win accuracy, and no losses in 600 games against perfect minimax
+across the three evaluation seeds.
+Larger-board thresholds remain deliberately stricter than the 0.10.0 release
+and may require further tuning before all models pass.
+
+| Board | Agreement | Win accuracy | Block accuracy | Random losses | Teacher losses |
+| ----- | --------: | -----------: | -------------: | ------------: | -------------: |
+| 3×3 | 99.5% | 99% | 95% | 0 | 0 |
+| 4×4–5×5 | 85% | 90% | 90% | ≤5 | ≤15 |
+| 6×6–8×8 | 82% | 90% | 90% | ≤5 | ≤15 |
+
+Loss limits apply independently to games played as X and O in every evaluation
+report. All three seeded reports must pass before generation succeeds.
 
 ## Models
 

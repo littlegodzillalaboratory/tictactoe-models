@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+- Strengthen per-board training configurations with larger networks, more
+  samples, and longer training runs.
+- Evaluate models across multiple seeds and reject generated models that miss
+  quality thresholds for teacher agreement, tactical accuracy, legality, or
+  game losses.
 
 ## 0.10.0 - 2026-11-15
 ### Added

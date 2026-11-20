@@ -16,6 +16,7 @@ rmdeps:
 
 deps-extra-apt:
 	apt-get update
+	apt-get install -y jq
 	apt-get install -y markdownlint
 
 deps-upgrade:
