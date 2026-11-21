@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Evaluate models across multiple seeds and reject generated models that miss
   quality thresholds for teacher agreement, tactical accuracy, legality, or
   game losses.
+- Make 3×3 training converge more reliably across PyTorch environments and add
+  NumPy explicitly for PyTorch initialization.
 
 ## 0.10.0 - 2026-11-15
 ### Added

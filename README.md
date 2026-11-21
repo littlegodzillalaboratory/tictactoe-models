@@ -63,7 +63,7 @@ and is included immediately before each generated file extension.
 
 | Board | Hidden units | Samples | Search depth | Epochs | Learning rate |
 | ----- | -----------: | ------: | -----------: | -----: | ------------: |
-| 3×3 | 128 | exhaustive | exact | 500 | 0.01 |
+| 3×3 | 256 | exhaustive | exact | 2,000 | 0.01 |
 | 4×4 | 128 | 50,000 | 4 | 300 | 0.005 |
 | 5×5 | 256 | 75,000 | 3 | 300 | 0.005 |
 | 6×6 | 256 | 100,000 | 3 | 300 | 0.005 |
@@ -76,15 +76,16 @@ minimum teacher agreement, tactical accuracy, legality, or loss thresholds.
 This prevents a release from publishing a model merely because training
 completed successfully.
 
-The 3×3 configuration was measured at 99.82% optimal-move agreement, 100%
-immediate-win accuracy, and no losses in 600 games against perfect minimax
-across the three evaluation seeds.
+The stronger 3×3 candidate reached 100% optimal-move agreement, 100%
+immediate-win accuracy, and no losses against either random or perfect-minimax
+opponents. Generation still verifies these results in the build environment
+before accepting the model.
 Larger-board thresholds remain deliberately stricter than the 0.10.0 release
 and may require further tuning before all models pass.
 
 | Board | Agreement | Win accuracy | Block accuracy | Random losses | Teacher losses |
 | ----- | --------: | -----------: | -------------: | ------------: | -------------: |
-| 3×3 | 99.5% | 99% | 95% | 0 | 0 |
+| 3×3 | 100% | 99% | 90% | 0 | 0 |
 | 4×4–5×5 | 85% | 90% | 90% | ≤5 | ≤15 |
 | 6×6–8×8 | 82% | 90% | 90% | ≤5 | ≤15 |
 
