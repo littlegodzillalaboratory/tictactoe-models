@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   game losses.
 - Make 3×3 training converge more reliably across PyTorch environments and add
   NumPy explicitly for PyTorch initialization.
+- Increase 4×4 model capacity and training duration to improve tactical
+  accuracy, and report quality failures for all board sizes in one build.
 
 ## 0.10.0 - 2026-11-15
 ### Added

@@ -64,7 +64,7 @@ and is included immediately before each generated file extension.
 | Board | Hidden units | Samples | Search depth | Epochs | Learning rate |
 | ----- | -----------: | ------: | -----------: | -----: | ------------: |
 | 3×3 | 256 | exhaustive | exact | 2,000 | 0.01 |
-| 4×4 | 128 | 50,000 | 4 | 300 | 0.005 |
+| 4×4 | 256 | 50,000 | 4 | 1,000 | 0.005 |
 | 5×5 | 256 | 75,000 | 3 | 300 | 0.005 |
 | 6×6 | 256 | 100,000 | 3 | 300 | 0.005 |
 | 7×7 | 256 | 125,000 | 3 | 300 | 0.005 |
@@ -80,6 +80,11 @@ The stronger 3×3 candidate reached 100% optimal-move agreement, 100%
 immediate-win accuracy, and no losses against either random or perfect-minimax
 opponents. Generation still verifies these results in the build environment
 before accepting the model.
+
+The stronger 4×4 candidate reached 95.7% teacher agreement, 96.5%
+immediate-win accuracy, 99.7% required-block accuracy, and no losses in 400
+evaluation games. `gen-all` completes every board-size attempt and reports all
+quality failures together before returning a failed status.
 Larger-board thresholds remain deliberately stricter than the 0.10.0 release
 and may require further tuning before all models pass.
 
