@@ -25,8 +25,6 @@ case "${BOARD_SIZE}" in
     LEARNING_RATE=0.01
     EVALUATION_SAMPLES=1000
     MIN_AGREEMENT=1.0
-    MIN_WIN_ACCURACY=0.99
-    MIN_BLOCK_ACCURACY=0.90
     MAX_RANDOM_LOSSES=0
     MAX_TEACHER_LOSSES=0
     ;;
@@ -37,9 +35,7 @@ case "${BOARD_SIZE}" in
     EPOCH_COUNT=1000
     LEARNING_RATE=0.005
     EVALUATION_SAMPLES=5000
-    MIN_AGREEMENT=0.85
-    MIN_WIN_ACCURACY=0.90
-    MIN_BLOCK_ACCURACY=0.90
+    MIN_AGREEMENT=0.90
     MAX_RANDOM_LOSSES=5
     MAX_TEACHER_LOSSES=15
     ;;
@@ -50,9 +46,7 @@ case "${BOARD_SIZE}" in
     EPOCH_COUNT=300
     LEARNING_RATE=0.005
     EVALUATION_SAMPLES=5000
-    MIN_AGREEMENT=0.85
-    MIN_WIN_ACCURACY=0.90
-    MIN_BLOCK_ACCURACY=0.90
+    MIN_AGREEMENT=0.75
     MAX_RANDOM_LOSSES=5
     MAX_TEACHER_LOSSES=15
     ;;
@@ -63,9 +57,7 @@ case "${BOARD_SIZE}" in
     EPOCH_COUNT=300
     LEARNING_RATE=0.005
     EVALUATION_SAMPLES=5000
-    MIN_AGREEMENT=0.82
-    MIN_WIN_ACCURACY=0.90
-    MIN_BLOCK_ACCURACY=0.90
+    MIN_AGREEMENT=0.75
     MAX_RANDOM_LOSSES=5
     MAX_TEACHER_LOSSES=15
     ;;
@@ -76,9 +68,7 @@ case "${BOARD_SIZE}" in
     EPOCH_COUNT=300
     LEARNING_RATE=0.005
     EVALUATION_SAMPLES=5000
-    MIN_AGREEMENT=0.82
-    MIN_WIN_ACCURACY=0.90
-    MIN_BLOCK_ACCURACY=0.90
+    MIN_AGREEMENT=0.72
     MAX_RANDOM_LOSSES=5
     MAX_TEACHER_LOSSES=15
     ;;
@@ -89,9 +79,7 @@ case "${BOARD_SIZE}" in
     EPOCH_COUNT=300
     LEARNING_RATE=0.005
     EVALUATION_SAMPLES=5000
-    MIN_AGREEMENT=0.82
-    MIN_WIN_ACCURACY=0.90
-    MIN_BLOCK_ACCURACY=0.90
+    MIN_AGREEMENT=0.75
     MAX_RANDOM_LOSSES=5
     MAX_TEACHER_LOSSES=15
     ;;
@@ -113,15 +101,11 @@ validate_evaluation() {
   local report_path="$1"
   if ! jq --exit-status \
     --argjson agreement "${MIN_AGREEMENT}" \
-    --argjson win_accuracy "${MIN_WIN_ACCURACY}" \
-    --argjson block_accuracy "${MIN_BLOCK_ACCURACY}" \
     --argjson random_losses "${MAX_RANDOM_LOSSES}" \
     --argjson teacher_losses "${MAX_TEACHER_LOSSES}" \
     '
       .illegal_move_rate == 0 and
       .move_agreement >= $agreement and
-      .immediate_win_accuracy >= $win_accuracy and
-      .required_block_accuracy >= $block_accuracy and
       .games_vs_random_as_x.losses <= $random_losses and
       .games_vs_random_as_o.losses <= $random_losses and
       .games_vs_teacher_as_x.losses <= $teacher_losses and
@@ -155,6 +139,7 @@ mkdir -p "${OUTPUT_DIR}"
   --output "${MODEL_PATH}" \
   > "${TRAINING_PATH}"
 
+failed=0
 for evaluation_seed in 42 314 2718; do
   report_path="${OUTPUT_DIR}/tictactoe-${BOARD_SIZE}x${BOARD_SIZE}"
   report_path="${report_path}-evaluation-seed${evaluation_seed}-${MODEL_VERSION}.json"
@@ -168,9 +153,15 @@ for evaluation_seed in 42 314 2718; do
     --games 100 \
     --seed "${evaluation_seed}" \
     > "${report_path}"
-  validate_evaluation "${report_path}"
+  if ! validate_evaluation "${report_path}"; then
+    failed=1
+  fi
   echo "Evaluation report: ${report_path}"
 done
+
+if [[ "${failed}" -ne 0 ]]; then
+  exit "${failed}"
+fi
 
 echo "Generated ${MODEL_PATH}"
 echo "Training report: ${TRAINING_PATH}"

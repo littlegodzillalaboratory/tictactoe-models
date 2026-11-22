@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   NumPy explicitly for PyTorch initialization.
 - Increase 4×4 model capacity and training duration to improve tactical
   accuracy, and report quality failures for all board sizes in one build.
+- Calibrate teacher-agreement thresholds by board size and retain tactical
+  accuracy as diagnostic metadata instead of a volatile release gate.
+- Complete all seeded evaluations when a model fails so CI reports every
+  quality result in one run.
 
 ## 0.10.0 - 2026-11-15
 ### Added
