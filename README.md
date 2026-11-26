@@ -66,9 +66,9 @@ and is included immediately before each generated file extension.
 | 3×3 | 256 | exhaustive | exact | 2,000 | 0.01 |
 | 4×4 | 256 | 50,000 | 4 | 1,000 | 0.005 |
 | 5×5 | 256 | 75,000 | 3 | 300 | 0.005 |
-| 6×6 | 256 | 100,000 | 3 | 300 | 0.005 |
+| 6×6 | 256 | 100,000 | 3 | 1,000 | 0.005 |
 | 7×7 | 256 | 125,000 | 3 | 300 | 0.005 |
-| 8×8 | 512 | 150,000 | 3 | 300 | 0.005 |
+| 8×8 | 512 | 150,000 | 3 | 1,000 | 0.005 |
 
 Every model is evaluated with 100 games per opponent and player assignment
 using seeds 42, 314, and 2718. Generation fails if any report misses its
